@@ -1,0 +1,23 @@
+.main {
+  margin: 0 auto;
+  max-width: 830px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button {
+  display: flex;
+  min-width: 625px;
+  gap: 12px;
+}
+
+.circles {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 55px;
+}

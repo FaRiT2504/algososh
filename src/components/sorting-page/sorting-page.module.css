@@ -1,0 +1,28 @@
+.main {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.wrapper {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.radios {
+  display: flex;
+  gap: 40px;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.sorting {
+  justify-content: center;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 48px;
+  display: flex;
+}
