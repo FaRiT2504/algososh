@@ -4,10 +4,12 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./sorting-page.module.css";
 import { Button } from "../ui/button/button";
 import { Column } from "../ui/column/column";
-import { swap, randomArray } from "../../utils/utils";
+import { swap, randomArray, delay } from "../../utils/utils";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
 import { RadioInput } from "../ui/radio-input/radio-input";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+
 
 export interface IRandomArray {
   value: number;
@@ -79,7 +81,7 @@ export const SortingPage: React.FC = () => {
         arr[i].state = ElementStates.Changing;
         arr[j].state = ElementStates.Changing;
         setArray([...arr]);
-        await new Promise(resolve => setTimeout(resolve, 400));
+        await delay(SHORT_DELAY_IN_MS);
         if (direction === Direction.Descending ? arr[j].value > arr[minIndex].value
           : arr[j].value < arr[minIndex].value) {
           minIndex = j;
@@ -115,7 +117,7 @@ export const SortingPage: React.FC = () => {
         arr[j].state = ElementStates.Changing;
         arr[j + 1].state = ElementStates.Changing;
         setArray([...arr]);
-        await new Promise(resolve => setTimeout(resolve, 400));
+        await delay(SHORT_DELAY_IN_MS);
 
         if (
           direction === Direction.Ascending

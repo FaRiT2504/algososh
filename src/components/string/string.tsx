@@ -3,8 +3,9 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
-import { swap } from "../../utils/utils";
+import { swap, delay } from "../../utils/utils";
 import { Input } from "../ui/input/input";
+import { DELAY_IN_MS } from "../../constants/delays";
 import styles from './string.module.css'
 
 
@@ -48,7 +49,7 @@ export const StringComponent: React.FC = () => {
       arr[end].state = ElementStates.Changing
       setStringValue([...arr])
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await delay(DELAY_IN_MS);
       swap(arr, start, end);
       arr[start].state = ElementStates.Modified
       arr[end].state = ElementStates.Modified

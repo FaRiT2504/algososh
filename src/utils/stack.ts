@@ -1,30 +1,3 @@
-// export interface IStack<T> {
-//   push: (item: T) => void;
-//   pop: () => void;
-//   getElements: () => void
-//   clearStack: () => void
-// }
-
-// export class Stack<T> implements IStack<T> {
-//   private container: T[] = [];
-
-//   push = (item: T): void => {
-//     this.container.push(item)
-//   };
-
-//   pop = (): void => {
-//     this.container.pop()
-//   };
-
-//   getElements = (): T[] => {
-//     return this.container
-//   }
-
-//   clearStack = (): void => {
-//     this.container = []
-//   }
-// }
-
 
 interface IStack<T> {
   push: (item: T) => void;

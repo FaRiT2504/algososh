@@ -7,16 +7,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  padding-top: 12px;
 }
 
 
 .button {
   width: 100%;
+  min-width: 175px;
+  max-width: 362px;
 }
 
 .input {
   flex-shrink: 0;
-  width: 204px;
+  width: 200px;
 }
 
 .text {
@@ -24,10 +27,6 @@
   padding-left: 15px;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: 0em;
 }
 
 .circles {

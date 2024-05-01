@@ -1,9 +1,11 @@
-import React, { useState, ChangeEvent, useCallback, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import styles from './fibonacci-page.module.css'
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/utils";
 
 export const FibonacciPage: React.FC = () => {
   const [input, setInput] = useState('');
@@ -22,10 +24,10 @@ export const FibonacciPage: React.FC = () => {
     return arr;
   };
 
-  const delay = async (num: number, setFibonacciArray: React.Dispatch<React.SetStateAction<number[]>>) => {
+  const fibonacciDelay = async (num: number, setFibonacciArray: React.Dispatch<React.SetStateAction<number[]>>) => {
     const arr = await makeFibonacciArray(num);
     for (let i = 0; i < arr.length; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await delay(SHORT_DELAY_IN_MS);
       setFibonacciArray(arr.slice(0, i + 1));
     }
   }
@@ -35,26 +37,30 @@ export const FibonacciPage: React.FC = () => {
     setLoading(true);
     e.preventDefault();
     const number = Number(input)
-    await delay(number, setFibonacciArray);
+    await fibonacciDelay(number, setFibonacciArray);
     setLoading(false);
   };
+
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
 
       <form className={styles.form} onSubmit={onSubmit}>
-        <Input type="number"
+        <Input
+          type="number"
           placeholder="Введите число"
           onChange={onChange}
           value={input}
+          maxLength={2}
           max={19}
           isLimitText={true}
           extraClass={styles.input}
         />
-        <Button text="Рассчитать"
+        <Button
+          text="Рассчитать"
           isLoader={isLoading}
-          disabled={!input}
           type="submit"
+          disabled={input.length > 0 && Number(input) < 20 ? false : true}
         />
       </form>
 

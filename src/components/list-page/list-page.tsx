@@ -9,6 +9,8 @@ import { Circle } from "../ui/circle/circle";
 import { LinkedList } from "../../utils/list";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import styles from "./list-page.module.css";
+import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/utils";
 
 const list = new LinkedList(randomArray(1, 6));
 
@@ -51,12 +53,12 @@ export const ListPage: React.FC = () => {
         value: inputValue,
         type: 'top'
       };
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await delay(DELAY_IN_MS);
       array[0]!.small = undefined;
       setIsLoading({ ...IsLoading, addToHead: false });
       list.toArray()[0]!.state = ElementStates.Modified;
       setArray(list.toArray());
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await delay(DELAY_IN_MS);
       list.toArray()[0]!.state = ElementStates.Default;
       setArray(list.toArray());
     }
@@ -77,12 +79,12 @@ export const ListPage: React.FC = () => {
         value: inputValue,
         type: 'top'
       }
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await delay(SHORT_DELAY_IN_MS);
       array[array.length - 1]!.small = undefined;
       setIsLoading({ ...IsLoading, addToTail: false });
       list.toArray()[list.toArray().length - 1]!.state = ElementStates.Modified;
       setArray(list.toArray());
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await delay(SHORT_DELAY_IN_MS);
       list.toArray()[list.toArray().length - 1]!.state = ElementStates.Default;
       setArray(list.toArray());
     }
@@ -99,7 +101,7 @@ export const ListPage: React.FC = () => {
       type: 'bottom'
     };
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     array[0]!.small = undefined;
     setArray(list.toArray());
     setIsLoading({ ...IsLoading, deleteHead: false });
@@ -113,7 +115,7 @@ export const ListPage: React.FC = () => {
       value: String(array[0]?.value),
       type: 'bottom'
     };
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     array[array.length - 1]!.small = undefined;
     setArray(list.toArray());
     setIsLoading({ ...IsLoading, deleteTail: false });
@@ -139,14 +141,14 @@ export const ListPage: React.FC = () => {
         type: 'top',
       };
       array[i]!.state = ElementStates.Changing;
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await delay(SHORT_DELAY_IN_MS);
       if (i > 0) {
         array[i - 1]!.small = undefined;
         setAddWithIndexHead(false);
       }
       setArray([...array]);
     }
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     array[+inputIndex]!.small = undefined;
     array[+inputIndex]!.state = ElementStates.Default;
     list.toArray().forEach((item) => item!.state = ElementStates.Default)
@@ -157,14 +159,14 @@ export const ListPage: React.FC = () => {
       small: undefined,
     })
     setArray([...array]);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
 
     setArray(list.toArray());
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     setIsLoading({ ...IsLoading, addWithIndex: false });
   }
 
-  const delWithIndex = async () => {
+  const deleteWithIndex = async () => {
     setIsLoading({ ...IsLoading, deleteWithIndex: true });
     setInputValue('');
     setInputIndex('');
@@ -173,7 +175,7 @@ export const ListPage: React.FC = () => {
     for (let i = 0; i <= +inputIndex; i++) {
       array[i]!.state = ElementStates.Changing;
       setArray([...array]);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await delay(SHORT_DELAY_IN_MS);
     }
     if (+inputIndex === array.length - 1) {
       setDeleteWithIndexTail(true);
@@ -188,9 +190,7 @@ export const ListPage: React.FC = () => {
       type: "bottom"
     }
     setArray([...array]);
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    console.log(list.toArray());
+    await delay(SHORT_DELAY_IN_MS);
     setArray(list.toArray());
     setDeleteWithIndexTail(false);
     setIsLoading({ ...IsLoading, deleteWithIndex: false });
@@ -208,30 +208,35 @@ export const ListPage: React.FC = () => {
             placeholder="Введите значение"
           />
           <Button
+            extraClass={styles.button}
             isLoader={IsLoading.addToHead}
             text="Добавить в head"
             onClick={addToHead}
             disabled={!inputValue}
           />
           <Button
+            extraClass={styles.button}
             isLoader={IsLoading.addToTail}
             text="Добавить в tail"
             onClick={addToTail}
             disabled={!inputValue}
           />
           <Button
+            extraClass={styles.button}
             isLoader={IsLoading.deleteHead}
             text="Удалить из head"
             onClick={deleteHead}
             disabled={(list.getSize() === 0)}
           />
           <Button
+            extraClass={styles.button}
             isLoader={IsLoading.deleteTail}
             text="Удалить из tail"
             onClick={deleteTail}
             disabled={(list.getSize() === 0)}
           />
         </div>
+        <span className={`${styles.text}`}>Максимум — 4 символа</span>
         <div className={`${styles.wrapper}`}>
           <Input
             extraClass={`${styles.input}`}
@@ -246,19 +251,21 @@ export const ListPage: React.FC = () => {
             text="Добавить по индексу"
             extraClass={`${styles.button}`}
             onClick={addWithIndex}
-            disabled={!inputIndex || !inputValue || (+inputIndex > list.getSize()) || (+inputIndex === list.getSize()) || (list.getSize() === 0)}
+            disabled={inputIndex !== null && inputIndex
+              && +inputIndex <= list.getSize() - 1 && +inputIndex >= 0 ? false : true}
           />
           <Button
             isLoader={IsLoading.deleteWithIndex}
             text="Удалить по индексу"
             extraClass={`${styles.button}`}
-            onClick={delWithIndex}
-            disabled={!inputIndex || (+inputIndex > list.getSize()) || (+inputIndex === list.getSize()) || list.getSize() !== 0}
+            onClick={deleteWithIndex}
+            disabled={inputIndex !== null && inputIndex
+              && +inputIndex <= list.getSize() - 1 && +inputIndex >= 0 ? false : true}
           />
         </div>
         <div className={`${styles.circles}`}>
           {array.map((item, index, arr) => (
-            <div className={`${styles.item}`}>
+            <div key={index} className={`${styles.item}`}>
               <Circle
                 key={index}
                 index={index}

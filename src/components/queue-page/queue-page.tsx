@@ -6,6 +6,8 @@ import { Button } from "../ui/button/button";
 import { Queue } from "../../utils/queue";
 import { Circle } from "../ui/circle/circle";
 import styles from "./queue-page.module.css";
+import { delay } from "../../utils/utils";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 interface IQueueArray {
   value?: string;
@@ -34,7 +36,7 @@ export const QueuePage: React.FC = () => {
       setIsLoading((prevState) => ({ ...prevState, add: true }));
       setInput('');
       arrayQueue[queue.getTail()] = { value: '', state: ElementStates.Changing };
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await delay(SHORT_DELAY_IN_MS);
       queue.enqueue({ value: input, state: ElementStates.Default });
       setArrayQueue(queue.getElements())
       setIsLoading((prevState) => ({ ...prevState, add: false }));
@@ -45,7 +47,7 @@ export const QueuePage: React.FC = () => {
   const deleteValue = async () => {
     setIsLoading((prevState) => ({ ...prevState, delete: true }));
     arrayQueue[queue.getHead()] = { value: arrayQueue[queue.getHead() - 1]?.value, state: ElementStates.Changing };
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     queue.dequeue();
     setArrayQueue(queue.getElements())
     setIsLoading((prevState) => ({ ...prevState, delete: false }));
@@ -62,7 +64,7 @@ export const QueuePage: React.FC = () => {
     setIsLoading((prevState) => ({ ...prevState, clear: true }));
     queue.clear();
     setArrayQueue(queue.getElements())
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     setIsLoading((prevState) => ({ ...prevState, clear: false }));
   };
 

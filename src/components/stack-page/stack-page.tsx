@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect, FormHTMLAttributes } from "react";
+import React, { useState, ChangeEvent } from "react";
 import styles from './stack-page.module.css'
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
@@ -6,9 +6,11 @@ import { Button } from "../ui/button/button";
 import { Stack } from "../../utils/stack";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
+import { delay } from "../../utils/utils";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export interface IStackArray {
-  letter: string;
+  value: string;
   state: ElementStates;
 }
 
@@ -27,9 +29,9 @@ export const StackPage: React.FC = () => {
 
   const pushItem = async () => {
     setIsLoading((prevState) => ({ ...prevState, add: true }));
-    stack.push({ letter: input, state: ElementStates.Changing })
+    stack.push({ value: input, state: ElementStates.Changing })
     setInput('');
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     stack.peak().state = ElementStates.Default;
     setIsLoading((prevState) => ({ ...prevState, add: false }));
   }
@@ -37,7 +39,7 @@ export const StackPage: React.FC = () => {
   const deleteItem = async () => {
     setIsLoading((prevState) => ({ ...prevState, delete: true }));
     stack.peak().state = ElementStates.Changing;
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     stack.pop()
     setIsLoading((prevState) => ({ ...prevState, delete: false }));
   }
@@ -45,7 +47,7 @@ export const StackPage: React.FC = () => {
   const clearStack = async () => {
     setIsLoading((prevState) => ({ ...prevState, clear: true }));
     stack.clear();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS);
     setIsLoading((prevState) => ({ ...prevState, clear: false }));
   }
 
@@ -67,18 +69,19 @@ export const StackPage: React.FC = () => {
           <Button text="Удалить"
             onClick={() => deleteItem()}
             isLoader={isLoading.delete}
-            disabled={isLoading.add || isLoading.clear}
+            disabled={stack.getSize() === 0 || (isLoading.add || isLoading.clear)}
+
           />
           <Button text="Очистить"
             extraClass={`ml-35`}
             isLoader={isLoading.clear}
             onClick={() => clearStack()}
-            disabled={isLoading.add || isLoading.delete}
+            disabled={stack.getSize() === 0 || (isLoading.add || isLoading.delete)}
           />
         </div>
         <div className={`${styles.circles}`}>
           {stack.getStack().map((item, index) =>
-            <Circle key={index} index={index} letter={item.letter} state={item.state} head={index === stack.getSize() - 1 ? 'top' : ''} />
+            <Circle key={index} index={index} letter={item.value} state={item.state} head={index === stack.getSize() - 1 ? 'top' : ''} />
           )};
         </div>
       </div>
