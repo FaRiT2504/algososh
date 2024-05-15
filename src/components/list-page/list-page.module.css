@@ -1,0 +1,56 @@
+.main {
+  max-width: 952px;
+  margin: 0 auto;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+
+.button {
+  width: 100%;
+  min-width: 175px;
+  max-width: 362px;
+}
+
+.input {
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.text {
+  display: flex;
+  padding-left: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.circles {
+  display: flex;
+  justify-content: center;
+  margin-top: 120px;
+  gap: 16px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.top {
+  top: -65px;
+  left: 12px;
+  position: absolute;
+}
+
+.bottom {
+  position: absolute;
+  top: 135px;
+  left: 13px;
+}
