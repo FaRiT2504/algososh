@@ -8,10 +8,10 @@ import { swap, randomArray, delay } from "../../utils/utils";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
 import { RadioInput } from "../ui/radio-input/radio-input";
-import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+// import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { selectionSort, bubbleSort } from "../../utils/sorting-page";
 
-
-export interface IRandomArray {
+export type TRandomArray = {
   value: number;
   state: ElementStates;
 }
@@ -22,7 +22,7 @@ export const SortingPage: React.FC = () => {
   const [isLoadingAscSort, setLoadingAscSort] = useState(false);
   const [isLoaderNewArray, setIsLoaderNewArray] = useState(false)
   const [isBubble, setIsbubble] = useState(false);
-  const [array, setArray] = useState<IRandomArray[]>([]);
+  const [array, setArray] = useState<TRandomArray[]>([]);
 
   useEffect(() => {
     setArray(randomArray(3, 17))
@@ -68,71 +68,71 @@ export const SortingPage: React.FC = () => {
     setLoadingDescSort(false);
   }
 
-  const selectionSort = async (
-    arr: IRandomArray[],
-    direction: Direction.Descending | Direction.Ascending,
-    setArray: React.Dispatch<React.SetStateAction<IRandomArray[]>>,
-  ): Promise<IRandomArray[]> => {
-    const length = arr.length;
-    for (let i = 0; i < length - 1; i++) {
-      let minIndex = i;
-      arr[minIndex].state = ElementStates.Changing;
-      for (let j = i + 1; j < length; j++) {
-        arr[i].state = ElementStates.Changing;
-        arr[j].state = ElementStates.Changing;
-        setArray([...arr]);
-        await delay(SHORT_DELAY_IN_MS);
-        if (direction === Direction.Descending ? arr[j].value > arr[minIndex].value
-          : arr[j].value < arr[minIndex].value) {
-          minIndex = j;
+  // const selectionSort = async (
+  //   arr: TRandomArray[],
+  //   direction: Direction.Descending | Direction.Ascending,
+  //   setArray: React.Dispatch<React.SetStateAction<TRandomArray[]>>,
+  // ): Promise<TRandomArray[]> => {
+  //   const length = arr.length;
+  //   for (let i = 0; i < length - 1; i++) {
+  //     let minIndex = i;
+  //     arr[minIndex].state = ElementStates.Changing;
+  //     for (let j = i + 1; j < length; j++) {
+  //       arr[i].state = ElementStates.Changing;
+  //       arr[j].state = ElementStates.Changing;
+  //       setArray([...arr]);
+  //       await delay(SHORT_DELAY_IN_MS);
+  //       if (direction === Direction.Descending ? arr[j].value > arr[minIndex].value
+  //         : arr[j].value < arr[minIndex].value) {
+  //         minIndex = j;
 
-        }
-        arr[j].state = ElementStates.Default;
-        setArray([...arr]);
-      }
-      if (minIndex !== i) {
-        arr[minIndex].state = ElementStates.Modified;
-        arr[i].state = ElementStates.Default;
-        swap(arr, i, minIndex);
-      }
-      else {
-        arr[i].state = ElementStates.Modified;
-      }
-      setArray([...arr]);
-    }
-    arr[arr.length - 1].state = ElementStates.Modified;
-    return arr;
-  }
+  //       }
+  //       arr[j].state = ElementStates.Default;
+  //       setArray([...arr]);
+  //     }
+  //     if (minIndex !== i) {
+  //       arr[minIndex].state = ElementStates.Modified;
+  //       arr[i].state = ElementStates.Default;
+  //       swap(arr, i, minIndex);
+  //     }
+  //     else {
+  //       arr[i].state = ElementStates.Modified;
+  //     }
+  //     setArray([...arr]);
+  //   }
+  //   arr[arr.length - 1].state = ElementStates.Modified;
+  //   return arr;
+  // }
 
-  const bubbleSort = async (
-    arr: IRandomArray[],
-    direction: Direction.Descending | Direction.Ascending,
-    setArray: React.Dispatch<React.SetStateAction<IRandomArray[]>>,
-  ): Promise<IRandomArray[]> => {
+  // const bubbleSort = async (
+  //   arr: TRandomArray[],
+  //   direction: Direction.Descending | Direction.Ascending,
+  //   setArray: React.Dispatch<React.SetStateAction<TRandomArray[]>>,
+  // ): Promise<TRandomArray[]> => {
 
-    const len = arr.length;
+  //   const len = arr.length;
 
-    for (let i = 0; i < len; i++) {
-      for (let j = 0; j < len - 1 - i; j++) {
-        arr[j].state = ElementStates.Changing;
-        arr[j + 1].state = ElementStates.Changing;
-        setArray([...arr]);
-        await delay(SHORT_DELAY_IN_MS);
+  //   for (let i = 0; i < len; i++) {
+  //     for (let j = 0; j < len - 1 - i; j++) {
+  //       arr[j].state = ElementStates.Changing;
+  //       arr[j + 1].state = ElementStates.Changing;
+  //       setArray([...arr]);
+  //       await delay(SHORT_DELAY_IN_MS);
 
-        if (
-          direction === Direction.Ascending
-            ? arr[j].value > arr[j + 1].value
-            : arr[j].value < arr[j + 1].value
-        ) {
-          swap(arr, j, j + 1)
-        }
-        arr[j].state = ElementStates.Default;
-      }
-      arr[arr.length - i - 1].state = ElementStates.Modified;
-      setArray([...arr]);
-    }
-    return arr;
-  }
+  //       if (
+  //         direction === Direction.Ascending
+  //           ? arr[j].value > arr[j + 1].value
+  //           : arr[j].value < arr[j + 1].value
+  //       ) {
+  //         swap(arr, j, j + 1)
+  //       }
+  //       arr[j].state = ElementStates.Default;
+  //     }
+  //     arr[arr.length - i - 1].state = ElementStates.Modified;
+  //     setArray([...arr]);
+  //   }
+  //   return arr;
+  // }
 
 
 

@@ -206,6 +206,8 @@ export const ListPage: React.FC = () => {
             maxLength={4}
             value={inputValue}
             placeholder="Введите значение"
+            name={"inputValue"}
+          // name='listValue'
           />
           <Button
             extraClass={styles.button}
@@ -213,6 +215,7 @@ export const ListPage: React.FC = () => {
             text="Добавить в head"
             onClick={addToHead}
             disabled={!inputValue}
+            id='addHead'
           />
           <Button
             extraClass={styles.button}
@@ -220,6 +223,7 @@ export const ListPage: React.FC = () => {
             text="Добавить в tail"
             onClick={addToTail}
             disabled={!inputValue}
+            id='addTail'
           />
           <Button
             extraClass={styles.button}
@@ -227,6 +231,7 @@ export const ListPage: React.FC = () => {
             text="Удалить из head"
             onClick={deleteHead}
             disabled={(list.getSize() === 0)}
+            id='deleteHead'
           />
           <Button
             extraClass={styles.button}
@@ -234,6 +239,7 @@ export const ListPage: React.FC = () => {
             text="Удалить из tail"
             onClick={deleteTail}
             disabled={(list.getSize() === 0)}
+            id='deleteTail'
           />
         </div>
         <span className={`${styles.text}`}>Максимум — 4 символа</span>
@@ -245,8 +251,11 @@ export const ListPage: React.FC = () => {
             maxLength={4}
             value={inputIndex}
             placeholder="Введите индекс"
+            name={"inputIndex"}
+
           />
           <Button
+            id='addIndex'
             isLoader={IsLoading.addWithIndex}
             text="Добавить по индексу"
             extraClass={`${styles.button}`}
@@ -255,6 +264,7 @@ export const ListPage: React.FC = () => {
               && +inputIndex <= list.getSize() - 1 && +inputIndex >= 0 ? false : true}
           />
           <Button
+            id='deleteIndex'
             isLoader={IsLoading.deleteWithIndex}
             text="Удалить по индексу"
             extraClass={`${styles.button}`}

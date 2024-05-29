@@ -14,19 +14,17 @@ interface IQueueArray {
   state: ElementStates;
   head?: string;
 }
-
 const arr = Array.from({ length: 7 }, () => ({ value: '', state: ElementStates.Default }));
 
 export const QueuePage: React.FC = () => {
   const [input, setInput] = useState('');
-  const [queue] = useState(new Queue<IQueueArray>(7));
-  const [arrayQueue, setArrayQueue] = useState<(IQueueArray | null)[]>(arr);
+  const [queue, setQueue] = useState(new Queue<IQueueArray>(7));
+  const [arrayQueue, setArrayQueue] = useState<(IQueueArray)[]>(arr);
   const [isLoading, setIsLoading] = useState({
     add: false,
     delete: false,
     clear: false,
   });
-
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   }
@@ -35,10 +33,25 @@ export const QueuePage: React.FC = () => {
     if (input !== '' && queue.getTail() < 7) {
       setIsLoading((prevState) => ({ ...prevState, add: true }));
       setInput('');
-      arrayQueue[queue.getTail()] = { value: '', state: ElementStates.Changing };
-      await delay(SHORT_DELAY_IN_MS);
       queue.enqueue({ value: input, state: ElementStates.Default });
-      setArrayQueue(queue.getElements())
+      setQueue(queue)
+      arrayQueue[queue.getTail()] = { value: '', state: ElementStates.Changing };
+      setArrayQueue([...arrayQueue])
+      await delay(SHORT_DELAY_IN_MS);
+
+      arrayQueue[queue.getTail() - 1] = {
+        value: input,
+        state: ElementStates.Changing,
+      };
+      setArrayQueue([...arrayQueue]);
+      arrayQueue[queue.getTail() - 1] = {
+        value: input,
+        state: ElementStates.Default,
+      };
+      setArrayQueue([...arrayQueue]);
+
+
+
       setIsLoading((prevState) => ({ ...prevState, add: false }));
     };
 
@@ -49,7 +62,7 @@ export const QueuePage: React.FC = () => {
     arrayQueue[queue.getHead()] = { value: arrayQueue[queue.getHead() - 1]?.value, state: ElementStates.Changing };
     await delay(SHORT_DELAY_IN_MS);
     queue.dequeue();
-    setArrayQueue(queue.getElements())
+    setArrayQueue([...arrayQueue])
     setIsLoading((prevState) => ({ ...prevState, delete: false }));
 
     if (queue.getHead() === 7 && queue.getTail() === 7 && queue.getLength() === 0) {
@@ -63,7 +76,7 @@ export const QueuePage: React.FC = () => {
   const clearQueue = async () => {
     setIsLoading((prevState) => ({ ...prevState, clear: true }));
     queue.clear();
-    setArrayQueue(queue.getElements())
+    setArrayQueue([...arrayQueue])
     await delay(SHORT_DELAY_IN_MS);
     setIsLoading((prevState) => ({ ...prevState, clear: false }));
   };
@@ -113,8 +126,8 @@ export const QueuePage: React.FC = () => {
 
               <Circle
                 key={index}
-                letter={item?.value}
-                state={item?.state}
+                letter={item.value}
+                state={item.state}
                 index={index}
                 head={head(index)}
                 tail={tail(index)}
